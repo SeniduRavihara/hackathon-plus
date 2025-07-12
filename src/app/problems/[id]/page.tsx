@@ -40,6 +40,9 @@ export default function ProblemSolvePage() {
     if (params.id) {
       fetchProblem(params.id as string)
     }
+
+    console.log(params.id);
+    
   }, [params.id])
 
   const fetchProblem = async (id: string) => {

@@ -1,7 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { sampleProblem } from "./[id]/route"
 
 // In-memory storage (replace with database in production)
-const problems: any[] = []
+const problems: any[] = [sampleProblem]
 let nextId = 1
 
 export async function GET() {
