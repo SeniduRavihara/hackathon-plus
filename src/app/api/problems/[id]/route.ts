@@ -1,9 +1,23 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-export const sampleProblem = {
-  id: 1,
-  title: "Two Sum",
-  description: `Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+export interface TestCase {
+  input: string;
+  expectedOutput: string;
+}
+
+export interface Problem {
+  id: number;
+  title: string;
+  description: string;
+  difficulty: string;
+  testCases: TestCase[];
+}
+
+const problems: Problem[] = [
+  {
+    id: 1,
+    title: "Two Sum",
+    description: `Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
 
 You may assume that each input would have exactly one solution, and you may not use the same element twice.
 
@@ -34,50 +48,46 @@ Second line contains the target integer
 
 Output Format:
 Two space-separated integers representing the indices`,
-  difficulty: "easy",
-  testCases: [
-    {
-      input: "2 7 11 15\n9",
-      expectedOutput: "0 1",
-    },
-    {
-      input: "3 2 4\n6",
-      expectedOutput: "1 2",
-    },
-    {
-      input: "3 3\n6",
-      expectedOutput: "0 1",
-    },
-    {
-      input: "1 2 3 4 5\n8",
-      expectedOutput: "2 4",
-    },
-    {
-      input: "-1 -2 -3 -4 -5\n-8",
-      expectedOutput: "2 4",
-    },
-    {
-      input: "0 4 3 0\n0",
-      expectedOutput: "0 3",
-    },
-  ],
-};
-
-// In-memory storage (replace with database in production)
-const problems: any[] = [sampleProblem];
+    difficulty: "easy",
+    testCases: [
+      {
+        input: "2 7 11 15\n9",
+        expectedOutput: "0 1",
+      },
+      {
+        input: "3 2 4\n6",
+        expectedOutput: "1 2",
+      },
+      {
+        input: "3 3\n6",
+        expectedOutput: "0 1",
+      },
+      {
+        input: "1 2 3 4 5\n8",
+        expectedOutput: "2 4",
+      },
+      {
+        input: "-1 -2 -3 -4 -5\n-8",
+        expectedOutput: "2 4",
+      },
+      {
+        input: "0 4 3 0\n0",
+        expectedOutput: "0 3",
+      },
+    ],
+  },
+];
 
 export async function GET(
   request: NextRequest,
   context: { params: { id: string } }
 ) {
-  const params = await context.params;
-  const problem = problems.find((p) => p.id === parseInt(params.id));
-  console.log(params.id, problem);
-
+  const params = context.params;
+  const problemId = parseInt(params.id);
+  const problem = problems.find((p) => p.id === problemId);
   if (!problem) {
     return NextResponse.json({ error: "Problem not found" }, { status: 404 });
   }
-
   return NextResponse.json(problem);
 }
 
@@ -85,13 +95,12 @@ export async function DELETE(
   request: NextRequest,
   context: { params: { id: string } }
 ) {
-  const params = await context.params;
-  const index = problems.findIndex((p) => p.id === params.id);
-
+  const params = context.params;
+  const problemId = parseInt(params.id);
+  const index = problems.findIndex((p) => p.id === problemId);
   if (index === -1) {
     return NextResponse.json({ error: "Problem not found" }, { status: 404 });
   }
-
   problems.splice(index, 1);
   return NextResponse.json({ message: "Problem deleted successfully" });
 }
